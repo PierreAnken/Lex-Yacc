@@ -8,23 +8,30 @@ Rule 2     expr -> expr MINUS expr
 Rule 3     expr -> MINUS expr
 Rule 4     expr -> expr TIMES expr
 Rule 5     expr -> expr DIV expr
-Rule 6     expr -> NUMBER
-Rule 7     expr -> LPAREN expr RPAREN
+Rule 6     expr -> expr MODULO expr
+Rule 7     expr -> expr POWER expr
+Rule 8     expr -> POWER
+Rule 9     expr -> NUMBER
+Rule 10    expr -> FLOAT
+Rule 11    expr -> LPAREN expr RPAREN
 
 Terminals, with rules where they appear
 
 DIV                  : 5
-LPAREN               : 7
+FLOAT                : 10
+LPAREN               : 11
 MINUS                : 2 3
-NUMBER               : 6
+MODULO               : 6
+NUMBER               : 9
 PLUS                 : 1
-RPAREN               : 7
+POWER                : 7 8
+RPAREN               : 11
 TIMES                : 4
 error                : 
 
 Nonterminals, with rules where they appear
 
-expr                 : 1 1 2 2 3 4 4 5 5 7 0
+expr                 : 1 1 2 2 3 4 4 5 5 6 6 7 7 11 0
 
 Parsing method: LALR
 
@@ -36,12 +43,18 @@ state 0
     (3) expr -> . MINUS expr
     (4) expr -> . expr TIMES expr
     (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (6) expr -> . expr MODULO expr
+    (7) expr -> . expr POWER expr
+    (8) expr -> . POWER
+    (9) expr -> . NUMBER
+    (10) expr -> . FLOAT
+    (11) expr -> . LPAREN expr RPAREN
 
     MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    POWER           shift and go to state 3
+    NUMBER          shift and go to state 4
+    FLOAT           shift and go to state 5
+    LPAREN          shift and go to state 6
 
     expr                           shift and go to state 1
 
@@ -52,11 +65,15 @@ state 1
     (2) expr -> expr . MINUS expr
     (4) expr -> expr . TIMES expr
     (5) expr -> expr . DIV expr
+    (6) expr -> expr . MODULO expr
+    (7) expr -> expr . POWER expr
 
-    PLUS            shift and go to state 5
-    MINUS           shift and go to state 6
-    TIMES           shift and go to state 7
-    DIV             shift and go to state 8
+    PLUS            shift and go to state 7
+    MINUS           shift and go to state 8
+    TIMES           shift and go to state 9
+    DIV             shift and go to state 10
+    MODULO          shift and go to state 11
+    POWER           shift and go to state 12
 
 
 state 2
@@ -67,45 +84,87 @@ state 2
     (3) expr -> . MINUS expr
     (4) expr -> . expr TIMES expr
     (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (6) expr -> . expr MODULO expr
+    (7) expr -> . expr POWER expr
+    (8) expr -> . POWER
+    (9) expr -> . NUMBER
+    (10) expr -> . FLOAT
+    (11) expr -> . LPAREN expr RPAREN
 
     MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    POWER           shift and go to state 3
+    NUMBER          shift and go to state 4
+    FLOAT           shift and go to state 5
+    LPAREN          shift and go to state 6
 
-    expr                           shift and go to state 9
+    expr                           shift and go to state 13
 
 state 3
 
-    (6) expr -> NUMBER .
+    (8) expr -> POWER .
 
-    PLUS            reduce using rule 6 (expr -> NUMBER .)
-    MINUS           reduce using rule 6 (expr -> NUMBER .)
-    TIMES           reduce using rule 6 (expr -> NUMBER .)
-    DIV             reduce using rule 6 (expr -> NUMBER .)
-    $end            reduce using rule 6 (expr -> NUMBER .)
-    RPAREN          reduce using rule 6 (expr -> NUMBER .)
+    PLUS            reduce using rule 8 (expr -> POWER .)
+    MINUS           reduce using rule 8 (expr -> POWER .)
+    TIMES           reduce using rule 8 (expr -> POWER .)
+    DIV             reduce using rule 8 (expr -> POWER .)
+    MODULO          reduce using rule 8 (expr -> POWER .)
+    POWER           reduce using rule 8 (expr -> POWER .)
+    $end            reduce using rule 8 (expr -> POWER .)
+    RPAREN          reduce using rule 8 (expr -> POWER .)
 
 
 state 4
 
-    (7) expr -> LPAREN . expr RPAREN
+    (9) expr -> NUMBER .
+
+    PLUS            reduce using rule 9 (expr -> NUMBER .)
+    MINUS           reduce using rule 9 (expr -> NUMBER .)
+    TIMES           reduce using rule 9 (expr -> NUMBER .)
+    DIV             reduce using rule 9 (expr -> NUMBER .)
+    MODULO          reduce using rule 9 (expr -> NUMBER .)
+    POWER           reduce using rule 9 (expr -> NUMBER .)
+    $end            reduce using rule 9 (expr -> NUMBER .)
+    RPAREN          reduce using rule 9 (expr -> NUMBER .)
+
+
+state 5
+
+    (10) expr -> FLOAT .
+
+    PLUS            reduce using rule 10 (expr -> FLOAT .)
+    MINUS           reduce using rule 10 (expr -> FLOAT .)
+    TIMES           reduce using rule 10 (expr -> FLOAT .)
+    DIV             reduce using rule 10 (expr -> FLOAT .)
+    MODULO          reduce using rule 10 (expr -> FLOAT .)
+    POWER           reduce using rule 10 (expr -> FLOAT .)
+    $end            reduce using rule 10 (expr -> FLOAT .)
+    RPAREN          reduce using rule 10 (expr -> FLOAT .)
+
+
+state 6
+
+    (11) expr -> LPAREN . expr RPAREN
     (1) expr -> . expr PLUS expr
     (2) expr -> . expr MINUS expr
     (3) expr -> . MINUS expr
     (4) expr -> . expr TIMES expr
     (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (6) expr -> . expr MODULO expr
+    (7) expr -> . expr POWER expr
+    (8) expr -> . POWER
+    (9) expr -> . NUMBER
+    (10) expr -> . FLOAT
+    (11) expr -> . LPAREN expr RPAREN
 
     MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    POWER           shift and go to state 3
+    NUMBER          shift and go to state 4
+    FLOAT           shift and go to state 5
+    LPAREN          shift and go to state 6
 
-    expr                           shift and go to state 10
+    expr                           shift and go to state 14
 
-state 5
+state 7
 
     (1) expr -> expr PLUS . expr
     (1) expr -> . expr PLUS expr
@@ -113,16 +172,22 @@ state 5
     (3) expr -> . MINUS expr
     (4) expr -> . expr TIMES expr
     (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (6) expr -> . expr MODULO expr
+    (7) expr -> . expr POWER expr
+    (8) expr -> . POWER
+    (9) expr -> . NUMBER
+    (10) expr -> . FLOAT
+    (11) expr -> . LPAREN expr RPAREN
 
     MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    POWER           shift and go to state 3
+    NUMBER          shift and go to state 4
+    FLOAT           shift and go to state 5
+    LPAREN          shift and go to state 6
 
-    expr                           shift and go to state 11
+    expr                           shift and go to state 15
 
-state 6
+state 8
 
     (2) expr -> expr MINUS . expr
     (1) expr -> . expr PLUS expr
@@ -130,16 +195,22 @@ state 6
     (3) expr -> . MINUS expr
     (4) expr -> . expr TIMES expr
     (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (6) expr -> . expr MODULO expr
+    (7) expr -> . expr POWER expr
+    (8) expr -> . POWER
+    (9) expr -> . NUMBER
+    (10) expr -> . FLOAT
+    (11) expr -> . LPAREN expr RPAREN
 
     MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    POWER           shift and go to state 3
+    NUMBER          shift and go to state 4
+    FLOAT           shift and go to state 5
+    LPAREN          shift and go to state 6
 
-    expr                           shift and go to state 12
+    expr                           shift and go to state 16
 
-state 7
+state 9
 
     (4) expr -> expr TIMES . expr
     (1) expr -> . expr PLUS expr
@@ -147,16 +218,22 @@ state 7
     (3) expr -> . MINUS expr
     (4) expr -> . expr TIMES expr
     (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (6) expr -> . expr MODULO expr
+    (7) expr -> . expr POWER expr
+    (8) expr -> . POWER
+    (9) expr -> . NUMBER
+    (10) expr -> . FLOAT
+    (11) expr -> . LPAREN expr RPAREN
 
     MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    POWER           shift and go to state 3
+    NUMBER          shift and go to state 4
+    FLOAT           shift and go to state 5
+    LPAREN          shift and go to state 6
 
-    expr                           shift and go to state 13
+    expr                           shift and go to state 17
 
-state 8
+state 10
 
     (5) expr -> expr DIV . expr
     (1) expr -> . expr PLUS expr
@@ -164,143 +241,312 @@ state 8
     (3) expr -> . MINUS expr
     (4) expr -> . expr TIMES expr
     (5) expr -> . expr DIV expr
-    (6) expr -> . NUMBER
-    (7) expr -> . LPAREN expr RPAREN
+    (6) expr -> . expr MODULO expr
+    (7) expr -> . expr POWER expr
+    (8) expr -> . POWER
+    (9) expr -> . NUMBER
+    (10) expr -> . FLOAT
+    (11) expr -> . LPAREN expr RPAREN
 
     MINUS           shift and go to state 2
-    NUMBER          shift and go to state 3
-    LPAREN          shift and go to state 4
+    POWER           shift and go to state 3
+    NUMBER          shift and go to state 4
+    FLOAT           shift and go to state 5
+    LPAREN          shift and go to state 6
 
-    expr                           shift and go to state 14
+    expr                           shift and go to state 18
 
-state 9
+state 11
+
+    (6) expr -> expr MODULO . expr
+    (1) expr -> . expr PLUS expr
+    (2) expr -> . expr MINUS expr
+    (3) expr -> . MINUS expr
+    (4) expr -> . expr TIMES expr
+    (5) expr -> . expr DIV expr
+    (6) expr -> . expr MODULO expr
+    (7) expr -> . expr POWER expr
+    (8) expr -> . POWER
+    (9) expr -> . NUMBER
+    (10) expr -> . FLOAT
+    (11) expr -> . LPAREN expr RPAREN
+
+    MINUS           shift and go to state 2
+    POWER           shift and go to state 3
+    NUMBER          shift and go to state 4
+    FLOAT           shift and go to state 5
+    LPAREN          shift and go to state 6
+
+    expr                           shift and go to state 19
+
+state 12
+
+    (7) expr -> expr POWER . expr
+    (1) expr -> . expr PLUS expr
+    (2) expr -> . expr MINUS expr
+    (3) expr -> . MINUS expr
+    (4) expr -> . expr TIMES expr
+    (5) expr -> . expr DIV expr
+    (6) expr -> . expr MODULO expr
+    (7) expr -> . expr POWER expr
+    (8) expr -> . POWER
+    (9) expr -> . NUMBER
+    (10) expr -> . FLOAT
+    (11) expr -> . LPAREN expr RPAREN
+
+    MINUS           shift and go to state 2
+    POWER           shift and go to state 3
+    NUMBER          shift and go to state 4
+    FLOAT           shift and go to state 5
+    LPAREN          shift and go to state 6
+
+    expr                           shift and go to state 20
+
+state 13
 
     (3) expr -> MINUS expr .
     (1) expr -> expr . PLUS expr
     (2) expr -> expr . MINUS expr
     (4) expr -> expr . TIMES expr
     (5) expr -> expr . DIV expr
+    (6) expr -> expr . MODULO expr
+    (7) expr -> expr . POWER expr
 
     PLUS            reduce using rule 3 (expr -> MINUS expr .)
     MINUS           reduce using rule 3 (expr -> MINUS expr .)
     TIMES           reduce using rule 3 (expr -> MINUS expr .)
     DIV             reduce using rule 3 (expr -> MINUS expr .)
+    MODULO          reduce using rule 3 (expr -> MINUS expr .)
+    POWER           reduce using rule 3 (expr -> MINUS expr .)
     $end            reduce using rule 3 (expr -> MINUS expr .)
     RPAREN          reduce using rule 3 (expr -> MINUS expr .)
 
-  ! PLUS            [ shift and go to state 5 ]
-  ! MINUS           [ shift and go to state 6 ]
-  ! TIMES           [ shift and go to state 7 ]
-  ! DIV             [ shift and go to state 8 ]
+  ! PLUS            [ shift and go to state 7 ]
+  ! MINUS           [ shift and go to state 8 ]
+  ! TIMES           [ shift and go to state 9 ]
+  ! DIV             [ shift and go to state 10 ]
+  ! MODULO          [ shift and go to state 11 ]
+  ! POWER           [ shift and go to state 12 ]
 
 
-state 10
+state 14
 
-    (7) expr -> LPAREN expr . RPAREN
+    (11) expr -> LPAREN expr . RPAREN
     (1) expr -> expr . PLUS expr
     (2) expr -> expr . MINUS expr
     (4) expr -> expr . TIMES expr
     (5) expr -> expr . DIV expr
+    (6) expr -> expr . MODULO expr
+    (7) expr -> expr . POWER expr
 
-    RPAREN          shift and go to state 15
-    PLUS            shift and go to state 5
-    MINUS           shift and go to state 6
-    TIMES           shift and go to state 7
-    DIV             shift and go to state 8
+    RPAREN          shift and go to state 21
+    PLUS            shift and go to state 7
+    MINUS           shift and go to state 8
+    TIMES           shift and go to state 9
+    DIV             shift and go to state 10
+    MODULO          shift and go to state 11
+    POWER           shift and go to state 12
 
 
-state 11
+state 15
 
     (1) expr -> expr PLUS expr .
     (1) expr -> expr . PLUS expr
     (2) expr -> expr . MINUS expr
     (4) expr -> expr . TIMES expr
     (5) expr -> expr . DIV expr
+    (6) expr -> expr . MODULO expr
+    (7) expr -> expr . POWER expr
 
     PLUS            reduce using rule 1 (expr -> expr PLUS expr .)
     MINUS           reduce using rule 1 (expr -> expr PLUS expr .)
+    MODULO          reduce using rule 1 (expr -> expr PLUS expr .)
+    POWER           reduce using rule 1 (expr -> expr PLUS expr .)
     $end            reduce using rule 1 (expr -> expr PLUS expr .)
     RPAREN          reduce using rule 1 (expr -> expr PLUS expr .)
-    TIMES           shift and go to state 7
-    DIV             shift and go to state 8
+    TIMES           shift and go to state 9
+    DIV             shift and go to state 10
 
   ! TIMES           [ reduce using rule 1 (expr -> expr PLUS expr .) ]
   ! DIV             [ reduce using rule 1 (expr -> expr PLUS expr .) ]
-  ! PLUS            [ shift and go to state 5 ]
-  ! MINUS           [ shift and go to state 6 ]
+  ! PLUS            [ shift and go to state 7 ]
+  ! MINUS           [ shift and go to state 8 ]
+  ! MODULO          [ shift and go to state 11 ]
+  ! POWER           [ shift and go to state 12 ]
 
 
-state 12
+state 16
 
     (2) expr -> expr MINUS expr .
     (1) expr -> expr . PLUS expr
     (2) expr -> expr . MINUS expr
     (4) expr -> expr . TIMES expr
     (5) expr -> expr . DIV expr
+    (6) expr -> expr . MODULO expr
+    (7) expr -> expr . POWER expr
 
     PLUS            reduce using rule 2 (expr -> expr MINUS expr .)
     MINUS           reduce using rule 2 (expr -> expr MINUS expr .)
+    MODULO          reduce using rule 2 (expr -> expr MINUS expr .)
+    POWER           reduce using rule 2 (expr -> expr MINUS expr .)
     $end            reduce using rule 2 (expr -> expr MINUS expr .)
     RPAREN          reduce using rule 2 (expr -> expr MINUS expr .)
-    TIMES           shift and go to state 7
-    DIV             shift and go to state 8
+    TIMES           shift and go to state 9
+    DIV             shift and go to state 10
 
   ! TIMES           [ reduce using rule 2 (expr -> expr MINUS expr .) ]
   ! DIV             [ reduce using rule 2 (expr -> expr MINUS expr .) ]
-  ! PLUS            [ shift and go to state 5 ]
-  ! MINUS           [ shift and go to state 6 ]
+  ! PLUS            [ shift and go to state 7 ]
+  ! MINUS           [ shift and go to state 8 ]
+  ! MODULO          [ shift and go to state 11 ]
+  ! POWER           [ shift and go to state 12 ]
 
 
-state 13
+state 17
 
     (4) expr -> expr TIMES expr .
     (1) expr -> expr . PLUS expr
     (2) expr -> expr . MINUS expr
     (4) expr -> expr . TIMES expr
     (5) expr -> expr . DIV expr
+    (6) expr -> expr . MODULO expr
+    (7) expr -> expr . POWER expr
 
     PLUS            reduce using rule 4 (expr -> expr TIMES expr .)
     MINUS           reduce using rule 4 (expr -> expr TIMES expr .)
     TIMES           reduce using rule 4 (expr -> expr TIMES expr .)
     DIV             reduce using rule 4 (expr -> expr TIMES expr .)
+    MODULO          reduce using rule 4 (expr -> expr TIMES expr .)
+    POWER           reduce using rule 4 (expr -> expr TIMES expr .)
     $end            reduce using rule 4 (expr -> expr TIMES expr .)
     RPAREN          reduce using rule 4 (expr -> expr TIMES expr .)
 
-  ! PLUS            [ shift and go to state 5 ]
-  ! MINUS           [ shift and go to state 6 ]
-  ! TIMES           [ shift and go to state 7 ]
-  ! DIV             [ shift and go to state 8 ]
+  ! PLUS            [ shift and go to state 7 ]
+  ! MINUS           [ shift and go to state 8 ]
+  ! TIMES           [ shift and go to state 9 ]
+  ! DIV             [ shift and go to state 10 ]
+  ! MODULO          [ shift and go to state 11 ]
+  ! POWER           [ shift and go to state 12 ]
 
 
-state 14
+state 18
 
     (5) expr -> expr DIV expr .
     (1) expr -> expr . PLUS expr
     (2) expr -> expr . MINUS expr
     (4) expr -> expr . TIMES expr
     (5) expr -> expr . DIV expr
+    (6) expr -> expr . MODULO expr
+    (7) expr -> expr . POWER expr
 
     PLUS            reduce using rule 5 (expr -> expr DIV expr .)
     MINUS           reduce using rule 5 (expr -> expr DIV expr .)
     TIMES           reduce using rule 5 (expr -> expr DIV expr .)
     DIV             reduce using rule 5 (expr -> expr DIV expr .)
+    MODULO          reduce using rule 5 (expr -> expr DIV expr .)
+    POWER           reduce using rule 5 (expr -> expr DIV expr .)
     $end            reduce using rule 5 (expr -> expr DIV expr .)
     RPAREN          reduce using rule 5 (expr -> expr DIV expr .)
 
-  ! PLUS            [ shift and go to state 5 ]
-  ! MINUS           [ shift and go to state 6 ]
-  ! TIMES           [ shift and go to state 7 ]
-  ! DIV             [ shift and go to state 8 ]
+  ! PLUS            [ shift and go to state 7 ]
+  ! MINUS           [ shift and go to state 8 ]
+  ! TIMES           [ shift and go to state 9 ]
+  ! DIV             [ shift and go to state 10 ]
+  ! MODULO          [ shift and go to state 11 ]
+  ! POWER           [ shift and go to state 12 ]
 
 
-state 15
+state 19
 
-    (7) expr -> LPAREN expr RPAREN .
+    (6) expr -> expr MODULO expr .
+    (1) expr -> expr . PLUS expr
+    (2) expr -> expr . MINUS expr
+    (4) expr -> expr . TIMES expr
+    (5) expr -> expr . DIV expr
+    (6) expr -> expr . MODULO expr
+    (7) expr -> expr . POWER expr
 
-    PLUS            reduce using rule 7 (expr -> LPAREN expr RPAREN .)
-    MINUS           reduce using rule 7 (expr -> LPAREN expr RPAREN .)
-    TIMES           reduce using rule 7 (expr -> LPAREN expr RPAREN .)
-    DIV             reduce using rule 7 (expr -> LPAREN expr RPAREN .)
-    $end            reduce using rule 7 (expr -> LPAREN expr RPAREN .)
-    RPAREN          reduce using rule 7 (expr -> LPAREN expr RPAREN .)
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for MODULO resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
+    $end            reduce using rule 6 (expr -> expr MODULO expr .)
+    RPAREN          reduce using rule 6 (expr -> expr MODULO expr .)
+    PLUS            shift and go to state 7
+    MINUS           shift and go to state 8
+    TIMES           shift and go to state 9
+    DIV             shift and go to state 10
+    MODULO          shift and go to state 11
+    POWER           shift and go to state 12
 
+  ! PLUS            [ reduce using rule 6 (expr -> expr MODULO expr .) ]
+  ! MINUS           [ reduce using rule 6 (expr -> expr MODULO expr .) ]
+  ! TIMES           [ reduce using rule 6 (expr -> expr MODULO expr .) ]
+  ! DIV             [ reduce using rule 6 (expr -> expr MODULO expr .) ]
+  ! MODULO          [ reduce using rule 6 (expr -> expr MODULO expr .) ]
+  ! POWER           [ reduce using rule 6 (expr -> expr MODULO expr .) ]
+
+
+state 20
+
+    (7) expr -> expr POWER expr .
+    (1) expr -> expr . PLUS expr
+    (2) expr -> expr . MINUS expr
+    (4) expr -> expr . TIMES expr
+    (5) expr -> expr . DIV expr
+    (6) expr -> expr . MODULO expr
+    (7) expr -> expr . POWER expr
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIV resolved as shift
+  ! shift/reduce conflict for MODULO resolved as shift
+  ! shift/reduce conflict for POWER resolved as shift
+    $end            reduce using rule 7 (expr -> expr POWER expr .)
+    RPAREN          reduce using rule 7 (expr -> expr POWER expr .)
+    PLUS            shift and go to state 7
+    MINUS           shift and go to state 8
+    TIMES           shift and go to state 9
+    DIV             shift and go to state 10
+    MODULO          shift and go to state 11
+    POWER           shift and go to state 12
+
+  ! PLUS            [ reduce using rule 7 (expr -> expr POWER expr .) ]
+  ! MINUS           [ reduce using rule 7 (expr -> expr POWER expr .) ]
+  ! TIMES           [ reduce using rule 7 (expr -> expr POWER expr .) ]
+  ! DIV             [ reduce using rule 7 (expr -> expr POWER expr .) ]
+  ! MODULO          [ reduce using rule 7 (expr -> expr POWER expr .) ]
+  ! POWER           [ reduce using rule 7 (expr -> expr POWER expr .) ]
+
+
+state 21
+
+    (11) expr -> LPAREN expr RPAREN .
+
+    PLUS            reduce using rule 11 (expr -> LPAREN expr RPAREN .)
+    MINUS           reduce using rule 11 (expr -> LPAREN expr RPAREN .)
+    TIMES           reduce using rule 11 (expr -> LPAREN expr RPAREN .)
+    DIV             reduce using rule 11 (expr -> LPAREN expr RPAREN .)
+    MODULO          reduce using rule 11 (expr -> LPAREN expr RPAREN .)
+    POWER           reduce using rule 11 (expr -> LPAREN expr RPAREN .)
+    $end            reduce using rule 11 (expr -> LPAREN expr RPAREN .)
+    RPAREN          reduce using rule 11 (expr -> LPAREN expr RPAREN .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for PLUS in state 19 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 19 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 19 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 19 resolved as shift
+WARNING: shift/reduce conflict for MODULO in state 19 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 19 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 20 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 20 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 20 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 20 resolved as shift
+WARNING: shift/reduce conflict for MODULO in state 20 resolved as shift
+WARNING: shift/reduce conflict for POWER in state 20 resolved as shift

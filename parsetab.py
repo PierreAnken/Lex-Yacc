@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftTIMESDIVnonassocUMINUSDIV LPAREN MINUS NUMBER PLUS RPAREN TIMESexpr : expr PLUS exprexpr : expr MINUS exprexpr : MINUS expr %prec UMINUSexpr : expr TIMES expr\n            | expr DIV exprexpr : NUMBERexpr : LPAREN expr RPAREN'
+_lr_signature = 'leftPLUSMINUSleftTIMESDIVnonassocUMINUSDIV FLOAT LPAREN MINUS MODULO NUMBER PLUS POWER RPAREN TIMESexpr : expr PLUS exprexpr : expr MINUS exprexpr : MINUS expr %prec UMINUSexpr : expr TIMES expr\n    | expr DIV expr\n    | expr MODULO expr\n    | expr POWER expr\n    expr : POWERexpr : NUMBERexpr : FLOATexpr : LPAREN expr RPAREN'
     
-_lr_action_items = {'MINUS':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,],[2,6,2,-6,2,2,2,2,2,-3,6,-1,-2,-4,-5,-7,]),'NUMBER':([0,2,4,5,6,7,8,],[3,3,3,3,3,3,3,]),'LPAREN':([0,2,4,5,6,7,8,],[4,4,4,4,4,4,4,]),'$end':([1,3,9,11,12,13,14,15,],[0,-6,-3,-1,-2,-4,-5,-7,]),'PLUS':([1,3,9,10,11,12,13,14,15,],[5,-6,-3,5,-1,-2,-4,-5,-7,]),'TIMES':([1,3,9,10,11,12,13,14,15,],[7,-6,-3,7,7,7,-4,-5,-7,]),'DIV':([1,3,9,10,11,12,13,14,15,],[8,-6,-3,8,8,8,-4,-5,-7,]),'RPAREN':([3,9,10,11,12,13,14,15,],[-6,-3,15,-1,-2,-4,-5,-7,]),}
+_lr_action_items = {'MINUS':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,],[2,8,2,-8,-9,-10,2,2,2,2,2,2,2,-3,8,-1,-2,-4,-5,8,8,-11,]),'POWER':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,],[3,12,3,-8,-9,-10,3,3,3,3,3,3,3,-3,12,-1,-2,-4,-5,12,12,-11,]),'NUMBER':([0,2,6,7,8,9,10,11,12,],[4,4,4,4,4,4,4,4,4,]),'FLOAT':([0,2,6,7,8,9,10,11,12,],[5,5,5,5,5,5,5,5,5,]),'LPAREN':([0,2,6,7,8,9,10,11,12,],[6,6,6,6,6,6,6,6,6,]),'$end':([1,3,4,5,13,15,16,17,18,19,20,21,],[0,-8,-9,-10,-3,-1,-2,-4,-5,-6,-7,-11,]),'PLUS':([1,3,4,5,13,14,15,16,17,18,19,20,21,],[7,-8,-9,-10,-3,7,-1,-2,-4,-5,7,7,-11,]),'TIMES':([1,3,4,5,13,14,15,16,17,18,19,20,21,],[9,-8,-9,-10,-3,9,9,9,-4,-5,9,9,-11,]),'DIV':([1,3,4,5,13,14,15,16,17,18,19,20,21,],[10,-8,-9,-10,-3,10,10,10,-4,-5,10,10,-11,]),'MODULO':([1,3,4,5,13,14,15,16,17,18,19,20,21,],[11,-8,-9,-10,-3,11,-1,-2,-4,-5,11,11,-11,]),'RPAREN':([3,4,5,13,14,15,16,17,18,19,20,21,],[-8,-9,-10,-3,21,-1,-2,-4,-5,-6,-7,-11,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expr':([0,2,4,5,6,7,8,],[1,9,10,11,12,13,14,]),}
+_lr_goto_items = {'expr':([0,2,6,7,8,9,10,11,12,],[1,13,14,15,16,17,18,19,20,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,11 +27,15 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> expr","S'",1,None,None,None),
-  ('expr -> expr PLUS expr','expr',3,'p_add','simple_calculator.py',51),
-  ('expr -> expr MINUS expr','expr',3,'p_sub','simple_calculator.py',56),
-  ('expr -> MINUS expr','expr',2,'p_expr2uminus','simple_calculator.py',61),
-  ('expr -> expr TIMES expr','expr',3,'p_mult_div','simple_calculator.py',66),
-  ('expr -> expr DIV expr','expr',3,'p_mult_div','simple_calculator.py',67),
-  ('expr -> NUMBER','expr',1,'p_expr2NUM','simple_calculator.py',79),
-  ('expr -> LPAREN expr RPAREN','expr',3,'p_parens','simple_calculator.py',84),
+  ('expr -> expr PLUS expr','expr',3,'p_add','simple_calculator.py',60),
+  ('expr -> expr MINUS expr','expr',3,'p_sub','simple_calculator.py',65),
+  ('expr -> MINUS expr','expr',2,'p_expr2uminus','simple_calculator.py',70),
+  ('expr -> expr TIMES expr','expr',3,'p_mult_div_modulo_power','simple_calculator.py',75),
+  ('expr -> expr DIV expr','expr',3,'p_mult_div_modulo_power','simple_calculator.py',76),
+  ('expr -> expr MODULO expr','expr',3,'p_mult_div_modulo_power','simple_calculator.py',77),
+  ('expr -> expr POWER expr','expr',3,'p_mult_div_modulo_power','simple_calculator.py',78),
+  ('expr -> POWER','expr',1,'p_expr2POWER','simple_calculator.py',94),
+  ('expr -> NUMBER','expr',1,'p_expr2NUM','simple_calculator.py',98),
+  ('expr -> FLOAT','expr',1,'p_expr2FLOAT','simple_calculator.py',102),
+  ('expr -> LPAREN expr RPAREN','expr',3,'p_parens','simple_calculator.py',106),
 ]

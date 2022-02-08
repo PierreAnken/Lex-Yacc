@@ -9,17 +9,27 @@ tokens = (
     'DIV',
     'LPAREN',
     'RPAREN',
+    'FLOAT',
     'NUMBER',
+    'MODULO',
+    'POWER'
 )
 
 t_ignore = ' \t'
-
 t_PLUS = r'\+'
 t_MINUS = r'-'
+t_MODULO = r'\%'
 t_TIMES = r'\*'
 t_DIV = r'/'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_POWER = r'\^'
+
+
+def t_FLOAT(t):
+    r'[0-9]+\.[0-9]+'
+    t.value = float(t.value)
+    return t
 
 
 def t_NUMBER(t):
@@ -62,11 +72,19 @@ def p_expr2uminus(p):
     p[0] = - p[2]
 
 
-def p_mult_div(p):
-    '''expr : expr TIMES expr | expr DIV expr'''
+def p_mult_div_modulo_power(p):
+    '''expr : expr TIMES expr
+    | expr DIV expr
+    | expr MODULO expr
+    | expr POWER expr
+    '''
 
     if p[2] == '*':
         p[0] = p[1] * p[3]
+    elif p[2] == '%':
+        p[0] = p[1] % p[3]
+    elif p[2] == '^':
+        p[0] = p[1] ** p[3]
     else:
         if p[3] == 0:
             print("Can't divide by 0")
@@ -74,8 +92,18 @@ def p_mult_div(p):
         p[0] = p[1] / p[3]
 
 
+def p_expr2POWER(p):
+    'expr : POWER'
+    p[0] = p[1]
+
+
 def p_expr2NUM(p):
     'expr : NUMBER'
+    p[0] = p[1]
+
+
+def p_expr2FLOAT(p):
+    'expr : FLOAT'
     p[0] = p[1]
 
 
@@ -90,5 +118,5 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-res = parser.parse("-4*-(3-5)")  # the input
+res = parser.parse("3.16227^2")  # the input
 print(res)
