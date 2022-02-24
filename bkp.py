@@ -13,9 +13,7 @@ tokens = (
     'NUMBER',
     'MODULO',
     'POWER',
-    'FUNCNAME',
-    'BAR',
-    'FUNCTION'
+    'SEMICOLON'
 )
 
 t_ignore = ' \t'
@@ -27,12 +25,9 @@ t_DIV = r'/'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_POWER = r'\^'
-t_BAR = r'\|'
-t_FUNCTION = r'FUNCTION'
+t_SEMICOLON = r'\;'
 
-functions = {}
-
-
+functions = {'carre':'1+1'}
 
 def t_FLOAT(t):
     r'[0-9]+\.[0-9]+'
@@ -45,10 +40,11 @@ def t_NUMBER(t):
     t.value = int(t.value)
     return t
 
-def t_FUNCNAME(t):
-    r"""[a-z]+[a-z0-9]*"""
-    print(f'FUNCNAME: {t}')
-    return t
+
+# def t_FUNCNAME(t):
+#     r"""[a-zA-Z]+[a-zA-Z0-9]*"""
+#     return t
+
 
 def t_newline(t):
     r'\n+'
@@ -65,15 +61,8 @@ lexer = lex.lex()
 precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIV'),
-    ('left', 'FUNCTION', 'FUNCNAME'),
     ('nonassoc', 'UMINUS')
 )
-
-
-def p_split_bar(p):
-    'expr : expr BAR expr'
-    p[0] = (p[1], p[3])
-    print(f'p_split_bar: {list(p)}')
 
 
 def p_add(p):
@@ -89,6 +78,11 @@ def p_sub(p):
 def p_expr2uminus(p):
     'expr : MINUS expr %prec UMINUS'
     p[0] = - p[2]
+
+
+# def p_call_function(p):
+#     'expr : expr LPAREN RPAREN SEMICOLON'
+#     p[0] = 123
 
 
 def p_mult_div_modulo_power(p):
@@ -111,6 +105,7 @@ def p_mult_div_modulo_power(p):
         p[0] = p[1] / p[3]
 
 
+
 def p_expr2POWER(p):
     'expr : POWER'
     p[0] = p[1]
@@ -125,22 +120,9 @@ def p_expr2FLOAT(p):
     'expr : FLOAT'
     p[0] = p[1]
 
-
 def p_parens(p):
     'expr : LPAREN expr RPAREN'
     p[0] = p[2]
-
-
-def p_def_function(p):
-    'expr : FUNCTION FUNCNAME LPAREN expr RPAREN'
-    p[0] = functions[p[2]] = p[4]
-    print(f'p_def_function: {list(p)}')
-
-
-def p_call_function(p):
-    'expr : FUNCNAME LPAREN RPAREN'
-    p[0] = functions[p[1]]
-    print(f'p_call_function: {list(p)}')
 
 
 def p_error(p):
@@ -149,5 +131,5 @@ def p_error(p):
 
 parser = yacc.yacc()
 
-res = parser.parse("FUNCTION carre(3*5)|carre()")  # the input
+res = parser.parse("2+2")  # the input
 print(res)
